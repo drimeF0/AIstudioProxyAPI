@@ -622,6 +622,53 @@ async def _is_temporary_chat_active(page: AsyncPage) -> bool:
         return False
 
 
+async def dismiss_promo_dialog(page: AsyncPage, timeout_ms: int = 0) -> bool:
+    """Dismiss the AI Studio onboarding/upsell dialog if it blocks the UI."""
+    if timeout_ms > 0:
+        try:
+            await page.wait_for_selector(
+                'button.close-button[aria-label="close"]',
+                state="visible",
+                timeout=timeout_ms,
+            )
+        except Exception:
+            pass
+    try:
+        result = await page.evaluate(
+            """
+            () => {
+                const buttons = Array.from(
+                    document.querySelectorAll(
+                        'button.close-button[aria-label="close"]'
+                    )
+                );
+                let clicked = false;
+                for (const button of buttons) {
+                    const rect = button.getBoundingClientRect();
+                    if (rect.width > 0 && rect.height > 0) {
+                        button.click();
+                        clicked = true;
+                        break;
+                    }
+                }
+                return {count: buttons.length, clicked};
+            }
+            """
+        )
+        if result.get("clicked"):
+            logger.info("[UI] Closed AI Studio onboarding dialog")
+            await asyncio.sleep(0.5)
+        else:
+            logger.debug(
+                f"[UI] Promo dialog not dismissed "
+                f"(found={result.get('count')}, url={page.url})"
+            )
+        return bool(result.get("clicked"))
+    except Exception as e_dismiss:
+        logger.debug(f"[UI] Promo dialog dismiss skipped: {e_dismiss}")
+        return False
+
+
 async def enable_temporary_chat_mode(page: AsyncPage) -> bool:  # pragma: no cover
     """
     Check and enable "Temporary chat" mode in the AI Studio interface.

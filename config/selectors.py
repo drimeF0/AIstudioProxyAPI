@@ -22,7 +22,11 @@ INPUT_SELECTOR2 = PROMPT_TEXTAREA_SELECTOR
 # --- Button Selectors ---
 # Submit button: prioritize primary submit button in prompt area
 SUBMIT_BUTTON_SELECTOR = (
-    # Current UI structure
+    # Current UI structure (no type/aria-label on newer builds)
+    'ms-run-button button.ctrl-enter-submits, '
+    'ms-run-button button.ms-button-primary, '
+    'ms-run-button button, '
+    'button.ctrl-enter-submits, '
     'ms-run-button button[type="submit"].ms-button-primary, '
     'ms-run-button button[type="submit"], '
     # Legacy selectors
@@ -76,7 +80,11 @@ COPY_MARKDOWN_BUTTON_SELECTOR_ALT = 'div[role="menu"] button:has-text("Copy Mark
 
 # --- Settings Selectors ---
 MAX_OUTPUT_TOKENS_SELECTOR = 'input[aria-label="Maximum output tokens"]'
-STOP_SEQUENCE_INPUT_SELECTOR = 'input[aria-label="Add stop token"]'
+STOP_SEQUENCE_INPUT_SELECTOR = (
+    'input[aria-label="Add stop sequence"], '
+    'input[placeholder="Add stop..."], '
+    'input[aria-label="Add stop token"]'
+)
 MAT_CHIP_REMOVE_BUTTON_SELECTOR = 'mat-chip button.remove-button[aria-label*="Remove"]'
 TOP_P_INPUT_SELECTOR = (
     'ms-slider input[type="number"][max="1"], '

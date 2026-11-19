@@ -24,6 +24,7 @@ from browser_utils import (
     _close_page_logic,
     _handle_initial_model_state_and_storage,
     _initialize_page_logic,
+    dismiss_promo_dialog,
     enable_temporary_chat_mode,
     load_excluded_models,
 )
@@ -161,6 +162,7 @@ async def _initialize_browser_and_page():
         if state.is_page_ready:
             await _handle_initial_model_state_and_storage(state.page_instance)
             await enable_temporary_chat_mode(state.page_instance)
+            await dismiss_promo_dialog(state.page_instance, timeout_ms=3000)
             state.logger.info("Page initialized successfully.")
         else:
             state.logger.error("Page initialization failed.")

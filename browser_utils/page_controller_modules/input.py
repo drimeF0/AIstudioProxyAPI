@@ -4,6 +4,7 @@ from typing import Callable, List
 from playwright.async_api import TimeoutError
 from playwright.async_api import expect as expect_async
 
+from browser_utils.initialization import dismiss_promo_dialog
 from browser_utils.operations import save_error_snapshot
 from config import (
     CDK_OVERLAY_CONTAINER_SELECTOR,
@@ -132,6 +133,7 @@ class InputController(BaseController):
 
             # Try clicking button first, then Enter, then Combo keys
             button_clicked = False
+            await dismiss_promo_dialog(self.page)
             try:
                 self.logger.debug("[Input] Attempting to click submit button...")
                 # Handle potential dialogs before submit

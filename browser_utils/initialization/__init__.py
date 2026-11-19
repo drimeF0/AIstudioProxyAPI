@@ -3,6 +3,7 @@ from .core import (
     close_page_logic as _close_page_logic,
 )
 from .core import (
+    dismiss_promo_dialog,
     enable_temporary_chat_mode,
     signal_camoufox_shutdown,
 )
@@ -15,4 +16,5 @@ __all__ = [
     "_close_page_logic",
     "signal_camoufox_shutdown",
     "enable_temporary_chat_mode",
+    "dismiss_promo_dialog",
 ]

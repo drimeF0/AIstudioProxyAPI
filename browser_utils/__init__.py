@@ -10,6 +10,7 @@ from .debug_utils import (
 from .initialization import (
     _close_page_logic,
     _initialize_page_logic,
+    dismiss_promo_dialog,
     enable_temporary_chat_mode,
     signal_camoufox_shutdown,
 )
@@ -42,6 +43,7 @@ __all__ = [
     "_close_page_logic",
     "signal_camoufox_shutdown",
     "enable_temporary_chat_mode",
+    "dismiss_promo_dialog",
     # Page operations
     "_handle_model_list_response",
     "detect_and_extract_page_error",

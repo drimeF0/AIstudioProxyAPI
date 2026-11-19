@@ -26,7 +26,7 @@ from config import (
 )
 from models import ClientDisconnectedError, QuotaExceededError
 
-from .initialization import enable_temporary_chat_mode
+from .initialization import dismiss_promo_dialog, enable_temporary_chat_mode
 from .operations import (
     _get_final_response_content,
     _wait_for_response_completion,
@@ -76,6 +76,7 @@ class PageController(
         is_streaming: bool = True,
     ):
         self.logger.info(f"[{self.req_id}] Adjusting parameters...")
+        await dismiss_promo_dialog(self.page)
         await self._check_disconnect(
             check_client_disconnected, "Start Parameter Adjustment"
         )
@@ -135,6 +136,7 @@ class PageController(
             if await confirm.is_visible(timeout=2000):
                 await confirm.click(timeout=CLICK_TIMEOUT_MS)
             await enable_temporary_chat_mode(self.page)
+            await dismiss_promo_dialog(self.page)
 
     async def submit_prompt(
         self, prompt: str, image_list: List, check_client_disconnected: Callable
@@ -146,6 +148,7 @@ class PageController(
                 self.logger.info(
                     f"[{self.req_id}] Filling and submitting prompt (Attempt {attempt + 1}/{max_retries})..."
                 )
+                await dismiss_promo_dialog(self.page)
                 textarea = self.page.locator(PROMPT_TEXTAREA_SELECTOR)
                 await expect_async(textarea).to_be_visible(timeout=10000)
                 await self._check_disconnect(
